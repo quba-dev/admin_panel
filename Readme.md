@@ -105,7 +105,7 @@ Headers:
 payload:
 ``` json
     {
-        "username": string;
+        "role": string;
     }
 ```
 
