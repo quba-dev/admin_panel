@@ -20,31 +20,26 @@ class authController {
             const emailExist = await User.findOne({email})
             if(password_confirmation !== password){
                 return res.status(400).json('bad password')
-            } else {
-                if(userExist){
-                    res.status(400).json('Такой пользователь уже существует')
-                } else {
-                    if(emailExist){
-                        res.status(400).json('Пользователь с такой почтой уже существует!')
-                    } else {
-                        const passwordHash = bcryptjs.hashSync(password, 10)
-                        const role = await Role.findOne({value: "user"})
-                        const activation_code = uuidv4()
-                        await SendMail.sendActivationLink(email,
-                            `http://127.0.0.1:5000/auth/activate/${activation_code}`)
-                        const user = await new User({username, password: passwordHash,email, first_name, last_name,
-                            activation_code})
-                        const token = TokenService.generateAccessToken(user._id, user.isBanned, role.value)
-                        await TokenService.saveToken(user._id, token.refreshToken);
-                        const createRole = await new UserRoles({user_id: user._id, role_id: role._id})
-                        createRole.save()
-                        user.save()
-                        res.json({message: 'Вы успешно зарегестрировались'})
-                    }
-
-                }
-
             }
+            if(userExist){
+                return res.status(400).json('Такой пользователь уже существует')
+            }
+            if(emailExist){
+                return res.status(400).json('Пользователь с такой почтой уже существует!')
+            }
+            const passwordHash = bcryptjs.hashSync(password, 10)
+            const role = await Role.findOne({value: "user"})
+            const activation_code = uuidv4()
+            await SendMail.sendActivationLink(email,
+                `http://127.0.0.1:5000/auth/activate/${activation_code}`)
+            const user = await new User({username, password: passwordHash,email, first_name, last_name,
+                activation_code})
+            const token = TokenService.generateAccessToken(user._id, user.isBanned, role.value)
+            await TokenService.saveToken(user._id, token.refreshToken);
+            const createRole = await new UserRoles({user_id: user._id, role_id: role._id})
+            createRole.save()
+            user.save()
+            return res.json({message: 'Вы успешно зарегестрировались'})
 
         } catch (e) {
             console.log(e)

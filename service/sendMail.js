@@ -3,13 +3,21 @@ import nodemailer from 'nodemailer';
 class SendMail {
     constructor() {
         this.transporter = nodemailer.createTransport({
-            host: process.env.SMTP_HOST,
-            port: process.env.SMTP_PORT,
+            // host: process.env.SMTP_HOST,
+            // port: process.env.SMTP_PORT,
+            // secure: false,
+            // service: 'gmail',
+            // auth:{
+            //     user: process.env.SMTP_USER,
+            //     pass: process.env.SMTP_PASS
+            //
+            // }
+            host: 'smtp.gmail.com',
+            port: 587,
             secure: false,
-            service: 'gmail',
             auth:{
-                user: process.env.SMTP_USER,
-                pass: process.env.SMTP_PASS
+                user: 'qqubanu4.s@gmail.com',
+                pass: 'q767574u596096bZicky'
 
             }
         })
@@ -32,7 +40,7 @@ class SendMail {
         await this.transporter.sendMail({
             from: process.env.SMTP_USER,
             to,
-            subject: `Сброс пароля на ${process.env.API_URL}`,
+            subject: `Активация аккаунта на ${process.env.API_URL}`,
             text: '',
             html:
                 `
