@@ -3,23 +3,16 @@ import nodemailer from 'nodemailer';
 class SendMail {
     constructor() {
         this.transporter = nodemailer.createTransport({
-            // host: process.env.SMTP_HOST,
-            // port: process.env.SMTP_PORT,
-            // secure: false,
-            // service: 'gmail',
-            // auth:{
-            //     user: process.env.SMTP_USER,
-            //     pass: process.env.SMTP_PASS
-            //
-            // }
-            host: 'smtp.gmail.com',
-            port: 587,
+            host: process.env.SMTP_HOST,
+            port: process.env.SMTP_PORT,
             secure: false,
+            service: 'gmail',
             auth:{
-                user: 'qqubanu4.s@gmail.com',
-                pass: 'q767574u596096bZicky'
+                user: process.env.SMTP_USER,
+                pass: process.env.SMTP_PASS
 
             }
+
         })
     }
     async sendActivationLink (to, link){
